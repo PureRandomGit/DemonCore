@@ -1,44 +1,96 @@
-import * as THREE from 'three';
-
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-
-
-//Constants
+// Basic Scene Setup
 const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
-const loader = new GLTFLoader();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 5000 );
-const controls = new OrbitControls( camera, renderer.domElement );
-const raycaster = new THREE.Raycaster();
-const pointer = new THREE.Vector2();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-//Renderer
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+// Adding OrbitControls
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.25;
+controls.screenSpacePanning = false;
+controls.maxPolarAngle = Math.PI / 2;
 
-//3D Model
-loader.load( 'public/buildings/bigBuilding.gltf', function ( gltf ) {scene.add( gltf.scene );});
-loader.load( 'public/buildings/smallBuilding.gltf', function ( gltf ) {scene.add( gltf.scene );});
-loader.load( 'public/buildings/sky.gltf', function ( gltf ) {scene.add( gltf.scene );});
+// Adding lights
+const ambientLight = new THREE.AmbientLight(0x404040, 2); // Soft white light
+scene.add(ambientLight);
 
+const pointLight = new THREE.PointLight(0xffffff, 1);
+pointLight.position.set(10, 10, 10);
+scene.add(pointLight);
 
-//SkyDome
-var skyGeo = new THREE.SphereGeometry(100000, 25, 25); 
+// Function to load GLTF Models
+const loader = new THREE.GLTFLoader();
+const models = [];
 
-//Lighting
-const light = new THREE.HemisphereLight( 0xffffbb, 0x080820, 10 );
-scene.add( light );
+// Load ground GLTF model
+loader.load('public/ground.glb', function (gltf) {
+    const ground = gltf.scene;
+    ground.position.set(0, 0, 0); // Position the ground slightly below the models
+    scene.add(ground);
+});
 
-//Camera Position
-camera.position.set( 0, 10, 0);
+loader.load('public/sky.gltf', function (gltf) {
+    const ground = gltf.scene;
+    ground.position.set(0, 0, 0); // Position the ground slightly below the models
+    scene.add(ground);
+});
 
-//Animation
-function animate() {
-	requestAnimationFrame( animate );
-    controls.update();
-
-	renderer.render( scene, camera );
+// Load house models
+for (let i = 1; i <= 10; i++) {
+    loader.load(`public/buildings/house${i}.glb`, function (gltf) {
+        const model = gltf.scene;
+        model.userData = { id: i };  // Store an ID in the model's userData
+        // model.position.set((i - 5) * 3, 0, 0);  // Position the models
+        models.push(model);
+        scene.add(model);
+    });
 }
 
+// Set camera position
+camera.position.set(0, 3, 8);
+
+// Click Detection
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+function onMouseClick(event) {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(scene.children, true);
+    
+    if (intersects.length > 0) {
+        const intersectedObject = intersects[0].object;
+        let parent = intersectedObject;
+
+        // Traverse the parent hierarchy to find the object with userData
+        while (parent && !parent.userData.id) {
+            parent = parent.parent;
+        }
+
+        if (parent && parent.userData.id) {
+            const id = parent.userData.id;
+            alert(`House ${id} clicked!`);
+        }
+    }
+}
+
+window.addEventListener('click', onMouseClick, false);
+
+// Animation Loop
+function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+}
 animate();
+
+// Handle window resize
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
