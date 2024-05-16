@@ -25,7 +25,7 @@ const loader = new THREE.GLTFLoader();
 const models = [];
 
 // Load ground GLTF model
-loader.load('public/ground.glb', function (gltf) {
+loader.load('assets/ground.glb', function (gltf) {
     const ground = gltf.scene;
     ground.position.set(0, 0, 0); // Position the ground slightly below the models
     scene.add(ground);
@@ -33,7 +33,7 @@ loader.load('public/ground.glb', function (gltf) {
 
 // Load house models
 for (let i = 1; i <= 10; i++) {
-    loader.load(`public/buildings/house${i}.glb`, function (gltf) {
+    loader.load(`assets/buildings/house${i}.glb`, function (gltf) {
         const model = gltf.scene;
         model.userData = { id: i };  // Store an ID in the model's userData
         // model.position.set((i - 5) * 3, 0, 0);  // Position the models
