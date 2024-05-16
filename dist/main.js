@@ -31,12 +31,6 @@ loader.load('public/ground.glb', function (gltf) {
     scene.add(ground);
 });
 
-loader.load('public/sky.gltf', function (gltf) {
-    const ground = gltf.scene;
-    ground.position.set(0, 0, 0); // Position the ground slightly below the models
-    scene.add(ground);
-});
-
 // Load house models
 for (let i = 1; i <= 10; i++) {
     loader.load(`public/buildings/house${i}.glb`, function (gltf) {
@@ -49,7 +43,7 @@ for (let i = 1; i <= 10; i++) {
 }
 
 // Set camera position
-camera.position.set(0, 3, 8);
+camera.position.set(0, 4, 8);
 
 // Click Detection
 const raycaster = new THREE.Raycaster();
@@ -73,12 +67,40 @@ function onMouseClick(event) {
 
         if (parent && parent.userData.id) {
             const id = parent.userData.id;
-            alert(`House ${id} clicked!`);
+            if (id === 1) {
+                showModal('House 1 clicked!');
+            }
+            if (id === 2) {
+                showModal('House 2 clicked!');
+            }
+            if (id === 3) {
+                showModal('House 3 clicked!');
+            }
         }
     }
 }
 
 window.addEventListener('click', onMouseClick, false);
+
+// Function to show modal
+function showModal(message) {
+    const modal = document.getElementById('modal');
+    const modalText = document.getElementById('modal-text');
+    const span = document.getElementsByClassName('close')[0];
+
+    modalText.innerText = message;
+    modal.style.display = 'block';
+
+    span.onclick = function() {
+        modal.style.display = 'none';
+    };
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+}
 
 // Animation Loop
 function animate() {
