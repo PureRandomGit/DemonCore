@@ -1,0 +1,11 @@
+Model Information:
+* title:	Demon Core
+* source:	https://sketchfab.com/3d-models/demon-core-de55ec3817c94cc88fd9256a5ad1c5c3
+* author:	CarbonCopyCat (https://sketchfab.com/carboncopycat)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Demon Core" (https://sketchfab.com/3d-models/demon-core-de55ec3817c94cc88fd9256a5ad1c5c3) by CarbonCopyCat (https://sketchfab.com/carboncopycat) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
