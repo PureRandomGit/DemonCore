@@ -8,9 +8,10 @@ document.body.appendChild(renderer.domElement);
 // Adding OrbitControls
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.dampingFactor = 0.25;
+controls.dampingFactor = 0.5;
 controls.screenSpacePanning = false;
 controls.maxPolarAngle = Math.PI / 2;
+controls.maxDistance = 100;
 
 // Adding lights
 const ambientLight = new THREE.AmbientLight(0x404040, 2); // Soft white light
