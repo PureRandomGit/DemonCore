@@ -8,18 +8,35 @@ document.body.appendChild(renderer.domElement);
 // Adding OrbitControls
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.dampingFactor = 0.5;
+controls.dampingFactor = .5;
 controls.screenSpacePanning = false;
-controls.maxPolarAngle = Math.PI / 2;
-controls.maxDistance = 100;
+controls.maxPolarAngle = Math.PI / 3;
+controls.maxDistance = 20;
+controls.enablePan = false;
+controls.mouseButtons = {
+	LEFT: THREE.MOUSE.ROTATE,
+	MIDDLE: THREE.MOUSE.DOLLY,
+	RIGHT: THREE.MOUSE.DOLLY
+}
+controls.touches = {
+	ONE: THREE.TOUCH.ROTATE,
+	TWO: THREE.TOUCH.DOLLY
+}
 
 // Adding lights
-const ambientLight = new THREE.AmbientLight(0x404040, 2); // Soft white light
+const ambientLight = new THREE.AmbientLight(0x404040, .5); // Soft white light
 scene.add(ambientLight);
 
-const pointLight = new THREE.PointLight(0xffffff, 1);
-pointLight.position.set(10, 10, 10);
-scene.add(pointLight);
+const hemiLight = new THREE.HemisphereLight( 0x0000ff, 0x00ff00, 2 ); 
+hemiLight.position.set(20, 100, 20);
+scene.add(hemiLight);
+
+const directLight = new THREE.DirectionalLight(0xffffff, 1);
+directLight.position.set(20, 100, 20);
+directLight.castShadow = true;
+scene.add(directLight);
+
+scene.fog = new THREE.Fog( 0xf2eac7, 30, 100 );
 
 // Function to load GLTF Models
 const loader = new THREE.GLTFLoader();
@@ -30,6 +47,11 @@ loader.load('assets/ground.glb', function (gltf) {
     const ground = gltf.scene;
     ground.position.set(0, 0, 0); // Position the ground slightly below the models
     scene.add(ground);
+});
+loader.load('assets/lake.glb', function (gltf) {
+    const lake = gltf.scene;
+    lake.position.set(0, 0, 0); // Position the ground slightly below the models
+    scene.add(lake);
 });
 
 // Load house models
