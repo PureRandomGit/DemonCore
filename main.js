@@ -10,8 +10,9 @@ const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = .5;
 controls.screenSpacePanning = false;
-controls.maxPolarAngle = Math.PI / 2;
+controls.maxPolarAngle = Math.PI / 2.5;
 controls.maxDistance = 20;
+controls.minDistance = 2.5;
 controls.enablePan = true;
 controls.mouseButtons = {
 	LEFT: THREE.MOUSE.ROTATE,
@@ -24,7 +25,7 @@ controls.touches = {
 }
 
 // Adding lights
-const ambientLight = new THREE.AmbientLight(0x404040, .5); // Soft white light
+const ambientLight = new THREE.AmbientLight(0x404040, 1); // Soft white light
 scene.add(ambientLight);
 
 const hemiLight = new THREE.HemisphereLight( 0xB1D9D9, 0xBF9000, 1 ); 
@@ -32,12 +33,12 @@ hemiLight.position.set(20, 100, 20);
 scene.add(hemiLight);
 
 const directLight = new THREE.DirectionalLight(0xffffff, 2.5);
-directLight.position.set(20, 100, 20);
+directLight.position.set(40, 100, 20);
 directLight.castShadow = true;
 scene.add(directLight);
 
 //Fog
-scene.fog = new THREE.Fog( 0xf2eac7, 10, 100 );
+scene.fog = new THREE.Fog( 0xc7f7f7, 10, 100 );
 
 // Function to load GLTF Models
 const loader = new THREE.GLTFLoader();

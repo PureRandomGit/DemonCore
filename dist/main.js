@@ -10,13 +10,14 @@ const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = .5;
 controls.screenSpacePanning = false;
-controls.maxPolarAngle = Math.PI / 3;
+controls.maxPolarAngle = Math.PI / 2.5;
 controls.maxDistance = 20;
-controls.enablePan = false;
+controls.minDistance = 2.5;
+controls.enablePan = true;
 controls.mouseButtons = {
 	LEFT: THREE.MOUSE.ROTATE,
 	MIDDLE: THREE.MOUSE.DOLLY,
-	RIGHT: THREE.MOUSE.DOLLY
+	RIGHT: THREE.MOUSE.PAN
 }
 controls.touches = {
 	ONE: THREE.TOUCH.ROTATE,
@@ -24,19 +25,20 @@ controls.touches = {
 }
 
 // Adding lights
-const ambientLight = new THREE.AmbientLight(0x404040, .5); // Soft white light
+const ambientLight = new THREE.AmbientLight(0x404040, 1); // Soft white light
 scene.add(ambientLight);
 
-const hemiLight = new THREE.HemisphereLight( 0x0000ff, 0x00ff00, 2 ); 
+const hemiLight = new THREE.HemisphereLight( 0xB1D9D9, 0xBF9000, 1 ); 
 hemiLight.position.set(20, 100, 20);
 scene.add(hemiLight);
 
-const directLight = new THREE.DirectionalLight(0xffffff, 1);
-directLight.position.set(20, 100, 20);
+const directLight = new THREE.DirectionalLight(0xffffff, 2.5);
+directLight.position.set(40, 100, 20);
 directLight.castShadow = true;
 scene.add(directLight);
 
-scene.fog = new THREE.Fog( 0xf2eac7, 30, 100 );
+//Fog
+scene.fog = new THREE.Fog( 0xc7f7f7, 10, 100 );
 
 // Function to load GLTF Models
 const loader = new THREE.GLTFLoader();
@@ -48,6 +50,11 @@ loader.load('assets/ground.glb', function (gltf) {
     ground.position.set(0, 0, 0); // Position the ground slightly below the models
     scene.add(ground);
 });
+loader.load('assets/sky.glb', function (gltf) {
+    const sky = gltf.scene;
+    sky.position.set(0, 0, 0); // Position the ground slightly below the models
+    scene.add(sky);
+});
 loader.load('assets/lake.glb', function (gltf) {
     const lake = gltf.scene;
     lake.position.set(0, 0, 0); // Position the ground slightly below the models
@@ -56,7 +63,7 @@ loader.load('assets/lake.glb', function (gltf) {
 
 // Load house models
 for (let i = 1; i <= 10; i++) {
-    loader.load(`assets/buildings/house${i}.glb`, function (gltf) {
+    loader.load(`assets/buildings/build${i}.glb`, function (gltf) {
         const model = gltf.scene;
         model.userData = { id: i };  // Store an ID in the model's userData
         // model.position.set((i - 5) * 3, 0, 0);  // Position the models
