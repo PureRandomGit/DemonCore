@@ -11,6 +11,11 @@
             background: linear-gradient(0deg, #face8d 50%, aquamarine 100%);
             font-family: 'Courier New', Courier, monospace;
         }
+        ul {
+            columns: 3;
+            -webkit-columns:3;
+            -moz-columns: 3;
+        }
         canvas { display: block; }
         .modal {
             display: none;
@@ -115,20 +120,60 @@
         </div>
     </div>
 
-
+<!-- Barracks/Housing -->
     <div id="modal-4" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <p>Gamma</p>
-            <p>Th</p>
+            <h1>Barracks/Housing</h1>
+            <p>
+                As Los Alamos was a military facility unlike the other testing and development sites housing and barracks were required. 
+                The housing included barracks and homes for the scientists and their families.
+            </p>
+            <h2>Scientist at Los Alamos</h2>
+            <figure>
+                <img src="https://www.uwstout.edu/sites/default/files/styles/large/public/2024-03/Atomic%20bomb_ChicagoPileTeam.png?h=eed6e968&itok=sfLaWjhQ" style="width: 50%; display: block; margin-left: auto; margin-right: auto;">
+            </figure>
+            <ul>
+                <li>Franklin Matthias</li>
+                <li>Klaus Fuchs</li>
+                <li>Vannevar Bush</li>
+                <li>Arthur Compton</li>
+                <li>Marie Curie</li>
+                <li>Edward Teller</li>
+                <li>J. Robert Oppenheimer</li>
+                <li>Albert Einstein</li>
+                <li>Leo Szilard</li>
+                <li>Hans Bethe</li>
+                <li>David Hill</li>
+                <li>Lilli Hornig</li>
+                <li>Robert Serber</li>
+                <li>Kenneth Bainbridge</li>
+                <li>George Kistiakowsky</li>
+                <li>Richard Feynman</li>
+                <li>J. Ernest Wilkins Jr.</li>
+                <li>Liane Russell</li>
+                <li>Samuel Massie</li>
+                <li>Louis Slotin</li>
+                <li>Enrico Fermi</li>
+                <li>Edwin McMillan</li>
+                <li>Glenn Seaborg</li>
+                <li>Leona Libby</li>
+                <li>Luis Alvarez</li>
+                <li>Moddie Taylor</li>
+                <li>William Knox Jr.</li>
+                <li>Floy Agnes Lee</li>
+                <li>Lise Meitner</li>
+                <li> Ernest Lawrence</li>
+            </ul>
+
         </div>
     </div>
 
     <div id="modal-5" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <p>House 5 clicked!</p>
-            <p>Details and content for house 5.</p>
+            <h1>Workshops/Factories</h1>
+            <p>Experiments and devices such as the the demon core were assembled within Los Alamos. After a fire in 1945 all plutonium and polonium operations were moved 2 miles away for safety.</p>
         </div>
     </div>
 
@@ -175,6 +220,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/objects/Sky.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
