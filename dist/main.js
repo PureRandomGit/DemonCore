@@ -71,13 +71,29 @@ for (let i = 1; i <= 10; i++) {
         scene.add(model);
     });
 }
-
+for (let i = 1; i <= 10; i++) {
+    loader.load(`assets/struct/struct${i}.glb`, function (gltf) {
+        const struct = gltf.scene;
+        struct.userData = { id: i };  // Store an ID in the model's userData
+        // model.position.set((i - 5) * 3, 0, 0);  // Position the models
+        models.push(struct);
+        scene.add(struct);
+    });
+}
 // Set camera position
 camera.position.set(0, 4, 8);
 
 // Click Detection
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
+
+
+// Set camera position
+camera.position.set(0, 4, 8);
+
+// Click Detection
+// const raycaster = new THREE.Raycaster();
+// const mouse = new THREE.Vector2();
 
 function onMouseClick(event) {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -97,15 +113,7 @@ function onMouseClick(event) {
 
         if (parent && parent.userData.id) {
             const id = parent.userData.id;
-            if (id === 1) {
-                showModal('House 1 clicked!');
-            }
-            if (id === 2) {
-                showModal('House 2 clicked!');
-            }
-            if (id === 3) {
-                showModal('House 3 clicked!');
-            }
+            showModal(id);
         }
     }
 }
@@ -113,23 +121,23 @@ function onMouseClick(event) {
 window.addEventListener('click', onMouseClick, false);
 
 // Function to show modal
-function showModal(message) {
-    const modal = document.getElementById('modal');
-    const modalText = document.getElementById('modal-text');
-    const span = document.getElementsByClassName('close')[0];
+function showModal(id) {
+    const modal = document.getElementById(`modal-${id}`);
+    if (modal) {
+        modal.style.display = 'block';
 
-    modalText.innerText = message;
-    modal.style.display = 'block';
+        const span = modal.getElementsByClassName('close')[0];
 
-    span.onclick = function() {
-        modal.style.display = 'none';
-    };
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
+        span.onclick = function() {
             modal.style.display = 'none';
-        }
-    };
+        };
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        };
+    }
 }
 
 // Animation Loop

@@ -9,6 +9,7 @@
             margin: 0; 
             overflow: hidden;
             background: linear-gradient(0deg, #face8d 50%, aquamarine 100%);
+            font-family: 'Courier New', Courier, monospace;
         }
         canvas { display: block; }
         .modal {
@@ -20,16 +21,18 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgb(0,0,0);
             background-color: rgba(0,0,0,0.4);
             padding-top: 60px;
         }
         .modal-content {
             background-color: #fefefe;
             margin: 5% auto;
-            padding: 20px;
+            padding: 10px;
+            margin-top: 0px;
             border: 1px solid #888;
-            width: 80%;
+            width: 90%;
+            border-radius: 20px;
+            border: none;
         }
         .close {
             color: #aaa;
@@ -46,16 +49,132 @@
     </style>
 </head>
 <body>
-    <div id="modal" class="modal">
+    <!-- Lab -->
+    <div id="modal-1" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <p id="modal-text"></p>
+            <h1>Laboratories</h1>
+
+            <h2>Nuclear Experiments</h2>
+            <p></p>
+            <h2>Demon Core</h2>
         </div>
     </div>
+
+    <!-- Hospital -->
+    <div id="modal-2" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h1>Hospital</h1>
+            <p>During the research and development of the Demon Core there were two fatal incidents.</p>
+            <p>The first accident was caused by 
+                Harry Daghlian fumbling and dropping the last reflector brick, causing the core to reach Super Critical, 
+                emitting a blast of radiation. The scientist performing this experiment immediately 
+                disassembled the contraption, causing himself to be blasted with further radiation. He died 25 days later of 
+                Acute Radiation Syndrome, over a week longer than the estimated life expectancy for ARS of 2 weeks.
+            </p>
+            <figure>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/Harry-K-Daghlian.gif" style="width: 20%; display: block; margin-left: auto; margin-right: auto;">
+                <figcaption style="text-align: center;">Harry Daghlian</figcaption>
+            </figure>
+            <p>
+                The second incident involving the Demon Core was due to improper safety protocol. 
+                Louis Slotin, the man who was demonstrating an experiment for his successor, was not following safety 
+                protocols and was using a flathead screwdriver to hold the 2 halves of the Demon Core housing apart. 
+                The screwdriver then slipped and a bright flash of blue light was emitted as the core reached critical mass. 
+                Slotin reportedly said after this happened "Well, that does it." He then uncovered the core so it wouldn't kill 
+                anyone else in the room. He died 9 days later of Acute Radiation Syndrome as well. 
+            </p>
+            <figure>
+                <img src="https://ahf.nuclearmuseum.org/wp-content/uploads/2014/06/Slotin%20Argonne.jpg" style="width: 20%; display: block; margin-left: auto; margin-right: auto;">
+                <figcaption style="text-align: center;">Louis Slotin</figcaption>
+            </figure>
+
+        </div>
+    </div>
+
+    <!-- Admin -->
+    <div id="modal-3" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h1>Administration/Offices</h1>
+            <h2>Background on the Manhattan Project</h2>
+            <p>The Manhattan Project was a response to fear that the Nazis had been developing their own atomic weapons. 
+                Refugees from fascist countries in Europe had learned about the new process called Atomic Fission, 
+                which is where neutrons collide with larger atoms and break them apart, 
+                creating more free neutrons and more collisions. This creates large amounts of energy, and, 
+                in a large enough amount, it can decimate entire cities in a single blast. This wasn't known yet, 
+                but people were concerned that Germany could use this power to make a bomb.
+            </p>
+            <p>
+                If the Nazis were developing an atomic bomb, then the Allies would be in big trouble. 
+                This led to the creation of the Office of Scientific Research and Development (renamed from the Advisory Committee on Uranium which was renamed to the National Defense Research Committee). 
+                When Japan attacked Pearl Harbour, the US decided it was time to join the fight, siding with the Allied Powers against Japan, Germany, Austria, Italy, and Vichy France. 
+                From there, we formed alliances with Canada and Great Britain to recruit scientists to work for the OSRD.
+            </p>
+        </div>
+    </div>
+
+
+    <div id="modal-4" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Gamma</p>
+            <p>Th</p>
+        </div>
+    </div>
+
+    <div id="modal-5" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>House 5 clicked!</p>
+            <p>Details and content for house 5.</p>
+        </div>
+    </div>
+
+    <div id="modal-6" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>House 6 clicked!</p>
+            <p>Details and content for house 6.</p>
+        </div>
+    </div>
+
+    <div id="modal-7" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>House 7 clicked!</p>
+            <p>Details and content for house 7.</p>
+        </div>
+    </div>
+
+    <div id="modal-8" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>House 8 clicked!</p>
+            <p>Details and content for house 8.</p>
+        </div>
+    </div>
+
+    <div id="modal-9" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>House 9 clicked!</p>
+            <p>Details and content for house 9.</p>
+        </div>
+    </div>
+
+    <div id="modal-10" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>House 10 clicked!</p>
+            <p>Details and content for house 10.</p>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
-
