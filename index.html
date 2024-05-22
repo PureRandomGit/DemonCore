@@ -16,7 +16,7 @@
             padding: 5px 10px;
             text-align: center;
             text-decoration: none;
-            border: black 3px solid;
+            border: black 2px solid;
             display: inline-block;
             margin: 10px;
             border-radius: 50px;
@@ -66,11 +66,38 @@
             text-decoration: none;
             cursor: pointer;
         }
+        .welcome {
+            position: absolute;
+            text-align: center;
+            color: black;
+            background-color: white;
+            font-size: 24px;
+            font-weight: bold;
+            display: show;
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 <body>
-    <a href="default.asp" target="_blank" style="right: 0px;">Test</a>
-    <a href="default.asp" target="_blank" >Informative Website</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfBLszMiknAj5kHMDcj8rX7iqexdAzhjQhNijjZE0HgJkh2yw/viewform?usp=sf_link" target="_blank" style="right: 0px;">Test</a>
+    <a href="https://sites.google.com/somerset.colegia.org/manhattanproject-demoncore/home" target="_blank" >Informative Website</a>
+   
+    <!-- <div id="loadingScreen">
+        <div id="loadingText">Loading...</div>
+        <div id="progressBarContainer">
+            <div id="progressBar"></div>
+        </div>
+    </div> -->
+    
+    <div class="welcome" id="welcome">
+        <h1>Welcome to Los Alamos</h1>
+        <p>Double click on a building to learn more about it.</p>
+        <p>Click and drag to move around the map.</p>
+        <br>
+        <h1>Loading...</h1>
+    </div>
+
     <!-- Lab -->
     <div id="modal-1" class="modal">
         <div class="modal-content">
@@ -78,8 +105,21 @@
             <h1>Laboratories</h1>
 
             <h2>Nuclear Experiments</h2>
-            <p></p>
+            <p>During the Manhattan Project, Los Alamos, New Mexico, served as the primary site for nuclear experiments aimed at developing the first atomic bombs. 
+                Key experiments included the "Trinity" test on July 16, 1945, the world's first detonation of a nuclear device. Scientists at Los Alamos conducted critical 
+                assembly tests, refining the design of both the uranium-based "Little Boy" and the plutonium-based "Fat Man" bombs. Other significant experiments took place 
+                at locations like Oak Ridge, Tennessee, and Hanford, Washington, where the production of 
+                fissile material was a major focus, contributing to the successful deployment of atomic weapons during World War II.</p>
             <h2>Demon Core</h2>
+            <p>
+                The "Demon Core" was a spherical mass of plutonium designed for use in atomic bombs, specifically as the fissile material at the core of a nuclear weapon. 
+                It operated by achieving a supercritical state, where the core's mass and density were sufficient to sustain an exponential chain 
+                reaction of nuclear fission.
+            </p>
+            <figure>
+                <img src="https://allthatsinteresting.com/wordpress/wp-content/uploads/2022/12/demon-core.jpeg" style="width: 20%; display: block; margin-left: auto; margin-right: auto;">
+                <figcaption style="text-align: center;">Demon Core</figcaption>
+            </figure>
         </div>
     </div>
 
@@ -88,7 +128,7 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h1>Hospital</h1>
-            <p>During the research and development of the Demon Core there were two fatal incidents.</p>
+            <p>During the research and development of the Demon Core there were two fatal incidents both of which took place when conducting an experiment called "Tickling the Dragons Tail" in which scientists would bring the demon core close to criticality to measure its properties and understand the behavior of the fission process under different conditions.</p>
             <p>The first accident was caused by 
                 Harry Daghlian fumbling and dropping the last reflector brick, causing the core to reach Super Critical, 
                 emitting a blast of radiation. The scientist performing this experiment immediately 
@@ -111,6 +151,12 @@
                 <img src="https://ahf.nuclearmuseum.org/wp-content/uploads/2014/06/Slotin%20Argonne.jpg" style="width: 20%; display: block; margin-left: auto; margin-right: auto;">
                 <figcaption style="text-align: center;">Louis Slotin</figcaption>
             </figure>
+            <h2>Deaths Caused by Nuclear Attacks</h2>
+            <p>The Enola Gay was the plane that dropped the uranium bomb, Little Boy, on Hiroshima, Japan. This event led to the death of 96,000 to 146,000 people. The plutonium bomb dropped on Nagasaki, Fat Man, killed between 60,000 to 80,000 people. It was the largest war crime ever committed. Children, families, civilians, military personnel, it didn't matter. They were all killed by the bombs. Should the Japanese not surrender after the first two bombs, there were plans to drop another bomb, called the Third Shot. It was the second plutonium implosion bomb.
+            </p>
+            <h2>Positive Medical Outcomes</h2>
+            <p>The success of the Manhattan Project ushered in the new Atomic Age of science, which lasted until 1963. The atomic age did have some positive outcomes, such as radiation therapy for cancer.
+            </p>
 
         </div>
     </div>
@@ -134,6 +180,15 @@
                 When Japan attacked Pearl Harbour, the US decided it was time to join the fight, siding with the Allied Powers against Japan, Germany, Austria, Italy, and Vichy France. 
                 From there, we formed alliances with Canada and Great Britain to recruit scientists to work for the OSRD.
             </p>
+            <p>
+                The Manhattan Project was responsible for the creation of the world's first atomic bomb. That's common knowledge. What isn't common knowledge is the details of the project. Most of the people who worked on the project were under strict orders from the government to not disclose any information about the project to the public, leading to the lack of knowledge. It was formally known as the Development of Substitute Materials, although the informal name 'Manhattan Project' eventually took over.
+            </p>
+            <p>
+                There were multiple big locations involved in the Manhattan Project. The one everyone knows about is Los Alamos, New Mexico, but the other two were Oak Ridge, Tennessee and Hanford, Washington. Hanford and Oak Ridge produced the nuclear material required for the production of the bombs at Los Alamos.
+            </p>
+            <figure>
+                <img src="https://www.nps.gov/mapr/planyourvisit/images/threesitesmap.png" style="width: 40%; display: block; margin-left: auto; margin-right: auto;">
+            </figure>
         </div>
     </div>
 
@@ -189,16 +244,30 @@
     <div id="modal-5" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h1>Workshops/Factories</h1>
-            <p>Experiments and devices such as the the demon core were assembled within Los Alamos. After a fire in 1945 all plutonium and polonium operations were moved 2 miles away for safety.</p>
+            <h1>Workshops/Factories</h1>After a fire in 1945 all plutonium and polonium operations were moved 2 miles away for safety.
+            <p>Experiments and devices such as the the demon core were assembled and tested within Los Alamos. There were several workshops each with their own purpose:</p>
+            <dl>
+                <dt>Metallurgy Workshop:</dt>
+                    <dd>Focused on the processing and machining of plutonium and uranium metals.</dd>
+                <dt>Physics Workshop:</dt>
+                    <dd>Conducted experiments on the properties of plutonium and uranium.</dd>
+                <dt>Explosives Workshop:</dt>
+                    <dd>Developed and tested explosives for use in the atomic bombs.</dd>
+                <dt>Assembly Workshop:</dt>
+                    <dd>Assembled the components of the atomic bombs.</dd>
+            </dl>
+            <figure>
+                <img src="https://www.nps.gov/mapr/learn/images/WebPhotoFatMan_1.jpg?maxwidth=1300&maxheight=1300&autorotate=false" style="width: 70%; display: block; margin-left: auto; margin-right: auto;">
+            </figure>
         </div>
+
     </div>
 
     <div id="modal-6" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <p>House 6 clicked!</p>
-            <p>Details and content for house 6.</p>
+            <h1>Ashley Pond</h1>
+            <p>Its a pond</p>
         </div>
     </div>
 

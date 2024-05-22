@@ -12,10 +12,10 @@ const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = .5;
 controls.screenSpacePanning = false;
-controls.maxPolarAngle = Math.PI / 2;
+controls.maxPolarAngle = Math.PI / 2.1;
 controls.maxDistance = 13;
 controls.minDistance = 2;
-controls.enablePan = true;
+controls.enablePan = false;
 controls.mouseButtons = {
 	LEFT: THREE.MOUSE.ROTATE,
 	MIDDLE: THREE.MOUSE.DOLLY,
@@ -25,6 +25,7 @@ controls.touches = {
 	ONE: THREE.TOUCH.ROTATE,
 	TWO: THREE.TOUCH.DOLLY
 }
+
 
 
 //Fog
@@ -53,6 +54,24 @@ scene.add( light );
 const loader = new THREE.GLTFLoader();
 const models = [];
 
+// Create a loading manager
+const loadingManager = new THREE.LoadingManager(
+    () => {
+        // When all items are loaded
+        const loadingScreen = document.getElementById('loadingScreen');
+        loadingScreen.style.display = 'none';
+    },
+    (itemUrl, itemsLoaded, itemsTotal) => {
+        // Update the progress bar
+        const progress = (itemsLoaded / itemsTotal) * 100;
+        document.getElementById('progressBar').style.width = `${progress}%`;
+        document.getElementById('loadingText').innerText = `Loading ${itemsLoaded} of ${itemsTotal}...`;
+    },
+    (url) => {
+        console.error(`There was an error loading ${url}`);
+    }
+);
+
 // Load ground GLTF model
 loader.load('assets/ground.glb', function (gltf) {
     const ground = gltf.scene;
@@ -74,11 +93,11 @@ loader.load('assets/sky.glb', function (gltf) {
     sky.position.set(0, 0, 0); // Position the ground slightly below the models
     scene.add(sky);
 });
-loader.load('assets/lake.glb', function (gltf) {
-    const lake = gltf.scene;
-    lake.position.set(0, 0, 0); // Position the ground slightly below the models
-    scene.add(lake);
-});
+// loader.load('assets/lake.glb', function (gltf) {
+//     const lake = gltf.scene;
+//     lake.position.set(0, 0, 0); // Position the ground slightly below the models
+//     scene.add(lake);
+// });
 
 // Load house models
 for (let i = 1; i <= 10; i++) {
@@ -114,8 +133,12 @@ for (let i = 1; i <= 10; i++) {
         scene.add(struct);
     });
 }
+// setTimeout(function(){
+//     document.getElementById("welcome").style.display = "none";
+// }, 10000);
+
 // Set camera position
-camera.position.set(25, 1.5, 10);
+camera.position.set(25, 2, 10);
 
 // Click Detection
 const raycaster = new THREE.Raycaster();
@@ -150,7 +173,7 @@ function onMouseClick(event) {
     }
 }
 
-window.addEventListener('click', onMouseClick, false);
+window.addEventListener('dblclick', onMouseClick, false);
 
 // Function to show modal
 function showModal(id) {
