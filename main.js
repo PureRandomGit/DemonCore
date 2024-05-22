@@ -150,9 +150,11 @@ function onMouseClick(event) {
     }
 }
 
-window.addEventListener('click', onMouseClick, false);
-
-// Function to show modal
+window.addEventListener('dblclick', onMouseClick, false);
+document.addEventListener("DOMContentLoaded", function() {
+    showModal("welcome");
+});
+    // Function to show modal
 function showModal(id) {
     const modal = document.getElementById(`modal-${id}`);
     if (modal) {
@@ -172,6 +174,13 @@ function showModal(id) {
     }
 }
 
+const welcome = document.getElementById("welcome");
+window.onclick = function(event){
+if (event.target == welcome) {
+     welcome.style.display = 'none';
+}};
+
+
 // Animation Loop
 function animate() {
     requestAnimationFrame(animate);
@@ -179,7 +188,6 @@ function animate() {
     renderer.render(scene, camera);
 }
 animate();
-
 // Handle window resize
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
