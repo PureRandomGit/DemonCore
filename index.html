@@ -66,19 +66,16 @@
             text-decoration: none;
             cursor: pointer;
         }
-        #loadingText {
-            margin-bottom: 10px;
-        }
-
-        #progressBarContainer {
-            width: 80%;
-            background: #444;
-        }
-
-        #progressBar {
-            width: 0%;
-            height: 20px;
-            background: #0f0;
+        .welcome {
+            position: absolute;
+            text-align: center;
+            color: black;
+            background-color: white;
+            font-size: 24px;
+            font-weight: bold;
+            display: show;
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
@@ -93,6 +90,14 @@
         </div>
     </div> -->
     
+    <div class="welcome" id="welcome">
+        <h1>Welcome to Los Alamos</h1>
+        <p>Double click on a building to learn more about it.</p>
+        <p>Click and drag to move around the map.</p>
+        <br>
+        <h1>Loading...</h1>
+    </div>
+
     <!-- Lab -->
     <div id="modal-1" class="modal">
         <div class="modal-content">
@@ -112,7 +117,7 @@
                 reaction of nuclear fission.
             </p>
             <figure>
-                <img src="            https://allthatsinteresting.com/wordpress/wp-content/uploads/2022/12/demon-core.jpeg" style="width: 20%; display: block; margin-left: auto; margin-right: auto;">
+                <img src="https://allthatsinteresting.com/wordpress/wp-content/uploads/2022/12/demon-core.jpeg" style="width: 20%; display: block; margin-left: auto; margin-right: auto;">
                 <figcaption style="text-align: center;">Demon Core</figcaption>
             </figure>
         </div>
@@ -262,6 +267,7 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h1>Ashley Pond</h1>
+            <p>Its a pond</p>
         </div>
     </div>
 
