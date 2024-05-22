@@ -1,211 +1,312 @@
-// Basic Scene Setup
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({antialias: true});
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Optional: Use soft shadows
-document.body.appendChild(renderer.domElement);
-
-// Adding OrbitControls
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = .5;
-controls.screenSpacePanning = false;
-controls.maxPolarAngle = Math.PI / 2.1;
-controls.maxDistance = 13;
-controls.minDistance = 2;
-controls.enablePan = false;
-controls.mouseButtons = {
-	LEFT: THREE.MOUSE.ROTATE,
-	MIDDLE: THREE.MOUSE.DOLLY,
-	RIGHT: THREE.MOUSE.PAN
-}
-controls.touches = {
-	ONE: THREE.TOUCH.ROTATE,
-	TWO: THREE.TOUCH.DOLLY
-}
-
-
-
-//Fog
-scene.fog = new THREE.Fog( 0xc7f7f7, 40, 100 );
-
-// Adding lights
-const ambientLight = new THREE.AmbientLight(0xffffff, 1); // Soft white light
-scene.add(ambientLight);
-
-const light = new THREE.DirectionalLight( 0xffffff, 2 );
-light.position.set( 5, 5, 5 ); //default; light shining from top
-light.castShadow = true; // default false
-
-light.shadow.camera.left = -10;
-light.shadow.camera.right = 10;
-light.shadow.camera.top = 10;
-light.shadow.camera.bottom = -10;
-light.shadow.mapSize.width = 2000; // default
-light.shadow.mapSize.height = 2000; // default
-light.shadow.camera.near = 0.1; // default
-light.shadow.camera.far = 500; // default
-// light.radius= 4;
-
-scene.add( light );
-// Function to load GLTF Models
-const loader = new THREE.GLTFLoader();
-const models = [];
-
-// Create a loading manager
-const loadingManager = new THREE.LoadingManager(
-    () => {
-        // When all items are loaded
-        const loadingScreen = document.getElementById('loadingScreen');
-        loadingScreen.style.display = 'none';
-    },
-    (itemUrl, itemsLoaded, itemsTotal) => {
-        // Update the progress bar
-        const progress = (itemsLoaded / itemsTotal) * 100;
-        document.getElementById('progressBar').style.width = `${progress}%`;
-        document.getElementById('loadingText').innerText = `Loading ${itemsLoaded} of ${itemsTotal}...`;
-    },
-    (url) => {
-        console.error(`There was an error loading ${url}`);
-    }
-);
-
-// Load ground GLTF model
-loader.load('assets/ground.glb', function (gltf) {
-    const ground = gltf.scene;
-    ground.position.set(0, 0, 0); // Position the ground slightly below the models
-    ground.receiveShadow = true; // Enable receiving shadows
-    ground.traverse( child =>
-        {
-            if( child.isMesh )
-            {
-                child.receiveShadow = true;
-            }
-        } );
-    scene.add(ground);
-});
-
-
-loader.load('assets/sky.glb', function (gltf) {
-    const sky = gltf.scene;
-    sky.position.set(0, 0, 0); // Position the ground slightly below the models
-    scene.add(sky);
-});
-// loader.load('assets/lake.glb', function (gltf) {
-//     const lake = gltf.scene;
-//     lake.position.set(0, 0, 0); // Position the ground slightly below the models
-//     scene.add(lake);
-// });
-
-// Load house models
-for (let i = 1; i <= 10; i++) {
-    loader.load(`assets/buildings/build${i}.glb`, function (gltf) {
-        const model = gltf.scene;
-        model.userData = { id: i };  // Store an ID in the model's userData
-        // model.position.set((i - 5) * 3, 0, 0);  // Position the models
-          model.traverse( child =>
-            {
-                if( child.isMesh )
-                {
-                    child.castShadow = true;
-                    child.receiveShadow = true;
-                }
-            } );
-        models.push(model);
-        scene.add(model);
-    });
-}
-for (let i = 1; i <= 10; i++) {
-    loader.load(`assets/struct/struct${i}.glb`, function (gltf) {
-        const struct = gltf.scene;
-        struct.userData = { id: i };  // Store an ID in the model's userData
-        // model.position.set((i - 5) * 3, 0, 0);  // Position the models
-        struct.traverse( child =>
-            {
-                if( child.isMesh )
-                {
-                    child.castShadow = true;
-                }
-            } );
-        models.push(struct);
-        scene.add(struct);
-    });
-}
-setTimeout(function(){
-    document.getElementById("welcome").style.display = "none";
-}, 10000);
-
-// Set camera position
-camera.position.set(25, 2, 10);
-
-// Click Detection
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-
-
-
-// Click Detection
-// const raycaster = new THREE.Raycaster();
-// const mouse = new THREE.Vector2();
-
-function onMouseClick(event) {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(scene.children, true);
-    
-    if (intersects.length > 0) {
-        const intersectedObject = intersects[0].object;
-        let parent = intersectedObject;
-
-        // Traverse the parent hierarchy to find the object with userData
-        while (parent && !parent.userData.id) {
-            parent = parent.parent;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los Alamos - Interactive Map</title>
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        a:link, a:visited {
+            background-color: white;
+            color: black;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            border: black 2px solid;
+            display: inline-block;
+            margin: 10px;
+            border-radius: 50px;
+            position: absolute;
         }
 
-        if (parent && parent.userData.id) {
-            const id = parent.userData.id;
-            showModal(id);
+         a:hover, a:active {
+            background-color: #f1f1f1;
         }
-    }
-}
+        ul {
+            columns: 3;
+            -webkit-columns:3;
+            -moz-columns: 3;
+        }
+        canvas { display: block; }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 10px;
+            margin-top: 0px;
+            border: 1px solid #888;
+            width: 90%;
+            border-radius: 20px;
+            border: none;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .welcome {
+            position: absolute;
+            text-align: center;
+            color: black;
+            background-color: white;
+            font-size: 24px;
+            font-weight: bold;
+            display: show;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfBLszMiknAj5kHMDcj8rX7iqexdAzhjQhNijjZE0HgJkh2yw/viewform?usp=sf_link" target="_blank" style="right: 0px;">Test</a>
+    <a href="https://sites.google.com/somerset.colegia.org/manhattanproject-demoncore/home" target="_blank" >Informative Website</a>
+   
+    <!-- <div id="loadingScreen">
+        <div id="loadingText">Loading...</div>
+        <div id="progressBarContainer">
+            <div id="progressBar"></div>
+        </div>
+    </div> -->
+    
+    <div class="welcome" id="welcome">
+        <h1>Welcome to Los Alamos</h1>
+        <p>Double click on a building to learn more about it.</p>
+        <p>Click and drag to move around the map.</p>
+        <br>
+        <h1>Loading...</h1>
+    </div>
 
-window.addEventListener('dblclick', onMouseClick, false);
+    <!-- Lab -->
+    <div id="modal-1" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h1>Laboratories</h1>
 
-// Function to show modal
-function showModal(id) {
-    const modal = document.getElementById(`modal-${id}`);
-    if (modal) {
-        modal.style.display = 'block';
+            <h2>Nuclear Experiments</h2>
+            <p>During the Manhattan Project, Los Alamos, New Mexico, served as the primary site for nuclear experiments aimed at developing the first atomic bombs. 
+                Key experiments included the "Trinity" test on July 16, 1945, the world's first detonation of a nuclear device. Scientists at Los Alamos conducted critical 
+                assembly tests, refining the design of both the uranium-based "Little Boy" and the plutonium-based "Fat Man" bombs. Other significant experiments took place 
+                at locations like Oak Ridge, Tennessee, and Hanford, Washington, where the production of 
+                fissile material was a major focus, contributing to the successful deployment of atomic weapons during World War II.</p>
+            <h2>Demon Core</h2>
+            <p>
+                The "Demon Core" was a spherical mass of plutonium designed for use in atomic bombs, specifically as the fissile material at the core of a nuclear weapon. 
+                It operated by achieving a supercritical state, where the core's mass and density were sufficient to sustain an exponential chain 
+                reaction of nuclear fission.
+            </p>
+            <figure>
+                <img src="https://allthatsinteresting.com/wordpress/wp-content/uploads/2022/12/demon-core.jpeg" style="width: 20%; display: block; margin-left: auto; margin-right: auto;">
+                <figcaption style="text-align: center;">Demon Core</figcaption>
+            </figure>
+        </div>
+    </div>
 
-        const span = modal.getElementsByClassName('close')[0];
+    <!-- Hospital -->
+    <div id="modal-2" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h1>Hospital</h1>
+            <p>During the research and development of the Demon Core there were two fatal incidents both of which took place when conducting an experiment called "Tickling the Dragons Tail" in which scientists would bring the demon core close to criticality to measure its properties and understand the behavior of the fission process under different conditions.</p>
+            <p>The first accident was caused by 
+                Harry Daghlian fumbling and dropping the last reflector brick, causing the core to reach Super Critical, 
+                emitting a blast of radiation. The scientist performing this experiment immediately 
+                disassembled the contraption, causing himself to be blasted with further radiation. He died 25 days later of 
+                Acute Radiation Syndrome, over a week longer than the estimated life expectancy for ARS of 2 weeks.
+            </p>
+            <figure>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/Harry-K-Daghlian.gif" style="width: 20%; display: block; margin-left: auto; margin-right: auto;">
+                <figcaption style="text-align: center;">Harry Daghlian</figcaption>
+            </figure>
+            <p>
+                The second incident involving the Demon Core was due to improper safety protocol. 
+                Louis Slotin, the man who was demonstrating an experiment for his successor, was not following safety 
+                protocols and was using a flathead screwdriver to hold the 2 halves of the Demon Core housing apart. 
+                The screwdriver then slipped and a bright flash of blue light was emitted as the core reached critical mass. 
+                Slotin reportedly said after this happened "Well, that does it." He then uncovered the core so it wouldn't kill 
+                anyone else in the room. He died 9 days later of Acute Radiation Syndrome as well. 
+            </p>
+            <figure>
+                <img src="https://ahf.nuclearmuseum.org/wp-content/uploads/2014/06/Slotin%20Argonne.jpg" style="width: 20%; display: block; margin-left: auto; margin-right: auto;">
+                <figcaption style="text-align: center;">Louis Slotin</figcaption>
+            </figure>
+            <h2>Deaths Caused by Nuclear Attacks</h2>
+            <p>The Enola Gay was the plane that dropped the uranium bomb, Little Boy, on Hiroshima, Japan. This event led to the death of 96,000 to 146,000 people. The plutonium bomb dropped on Nagasaki, Fat Man, killed between 60,000 to 80,000 people. It was the largest war crime ever committed. Children, families, civilians, military personnel, it didn't matter. They were all killed by the bombs. Should the Japanese not surrender after the first two bombs, there were plans to drop another bomb, called the Third Shot. It was the second plutonium implosion bomb.
+            </p>
+            <h2>Positive Medical Outcomes</h2>
+            <p>The success of the Manhattan Project ushered in the new Atomic Age of science, which lasted until 1963. The atomic age did have some positive outcomes, such as radiation therapy for cancer.
+            </p>
 
-        span.onclick = function() {
-            modal.style.display = 'none';
-        };
+        </div>
+    </div>
 
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        };
-    }
-}
+    <!-- Admin -->
+    <div id="modal-3" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h1>Administration/Offices</h1>
+            <h2>Background on the Manhattan Project</h2>
+            <p>The Manhattan Project was a response to fear that the Nazis had been developing their own atomic weapons. 
+                Refugees from fascist countries in Europe had learned about the new process called Atomic Fission, 
+                which is where neutrons collide with larger atoms and break them apart, 
+                creating more free neutrons and more collisions. This creates large amounts of energy, and, 
+                in a large enough amount, it can decimate entire cities in a single blast. This wasn't known yet, 
+                but people were concerned that Germany could use this power to make a bomb.
+            </p>
+            <p>
+                If the Nazis were developing an atomic bomb, then the Allies would be in big trouble. 
+                This led to the creation of the Office of Scientific Research and Development (renamed from the Advisory Committee on Uranium which was renamed to the National Defense Research Committee). 
+                When Japan attacked Pearl Harbour, the US decided it was time to join the fight, siding with the Allied Powers against Japan, Germany, Austria, Italy, and Vichy France. 
+                From there, we formed alliances with Canada and Great Britain to recruit scientists to work for the OSRD.
+            </p>
+            <p>
+                The Manhattan Project was responsible for the creation of the world's first atomic bomb. That's common knowledge. What isn't common knowledge is the details of the project. Most of the people who worked on the project were under strict orders from the government to not disclose any information about the project to the public, leading to the lack of knowledge. It was formally known as the Development of Substitute Materials, although the informal name 'Manhattan Project' eventually took over.
+            </p>
+            <p>
+                There were multiple big locations involved in the Manhattan Project. The one everyone knows about is Los Alamos, New Mexico, but the other two were Oak Ridge, Tennessee and Hanford, Washington. Hanford and Oak Ridge produced the nuclear material required for the production of the bombs at Los Alamos.
+            </p>
+            <figure>
+                <img src="https://www.nps.gov/mapr/planyourvisit/images/threesitesmap.png" style="width: 40%; display: block; margin-left: auto; margin-right: auto;">
+            </figure>
+        </div>
+    </div>
 
-// Animation Loop
-function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-}
-animate();
+<!-- Barracks/Housing -->
+    <div id="modal-4" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h1>Barracks/Housing</h1>
+            <p>
+                As Los Alamos was a military facility unlike the other testing and development sites housing and barracks were required. 
+                The housing included barracks and homes for the scientists and their families.
+            </p>
+            <h2>Scientist at Los Alamos</h2>
+            <figure>
+                <img src="https://www.uwstout.edu/sites/default/files/styles/large/public/2024-03/Atomic%20bomb_ChicagoPileTeam.png?h=eed6e968&itok=sfLaWjhQ" style="width: 50%; display: block; margin-left: auto; margin-right: auto;">
+            </figure>
+            <ul>
+                <li>Franklin Matthias</li>
+                <li>Klaus Fuchs</li>
+                <li>Vannevar Bush</li>
+                <li>Arthur Compton</li>
+                <li>Marie Curie</li>
+                <li>Edward Teller</li>
+                <li>J. Robert Oppenheimer</li>
+                <li>Albert Einstein</li>
+                <li>Leo Szilard</li>
+                <li>Hans Bethe</li>
+                <li>David Hill</li>
+                <li>Lilli Hornig</li>
+                <li>Robert Serber</li>
+                <li>Kenneth Bainbridge</li>
+                <li>George Kistiakowsky</li>
+                <li>Richard Feynman</li>
+                <li>J. Ernest Wilkins Jr.</li>
+                <li>Liane Russell</li>
+                <li>Samuel Massie</li>
+                <li>Louis Slotin</li>
+                <li>Enrico Fermi</li>
+                <li>Edwin McMillan</li>
+                <li>Glenn Seaborg</li>
+                <li>Leona Libby</li>
+                <li>Luis Alvarez</li>
+                <li>Moddie Taylor</li>
+                <li>William Knox Jr.</li>
+                <li>Floy Agnes Lee</li>
+                <li>Lise Meitner</li>
+                <li> Ernest Lawrence</li>
+            </ul>
 
-// Handle window resize
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});
+        </div>
+    </div>
+
+    <div id="modal-5" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h1>Workshops/Factories</h1>After a fire in 1945 all plutonium and polonium operations were moved 2 miles away for safety.
+            <p>Experiments and devices such as the the demon core were assembled and tested within Los Alamos. There were several workshops each with their own purpose:</p>
+            <dl>
+                <dt>Metallurgy Workshop:</dt>
+                    <dd>Focused on the processing and machining of plutonium and uranium metals.</dd>
+                <dt>Physics Workshop:</dt>
+                    <dd>Conducted experiments on the properties of plutonium and uranium.</dd>
+                <dt>Explosives Workshop:</dt>
+                    <dd>Developed and tested explosives for use in the atomic bombs.</dd>
+                <dt>Assembly Workshop:</dt>
+                    <dd>Assembled the components of the atomic bombs.</dd>
+            </dl>
+            <figure>
+                <img src="https://www.nps.gov/mapr/learn/images/WebPhotoFatMan_1.jpg?maxwidth=1300&maxheight=1300&autorotate=false" style="width: 70%; display: block; margin-left: auto; margin-right: auto;">
+            </figure>
+        </div>
+
+    </div>
+
+    <div id="modal-6" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h1>Ashley Pond</h1>
+            <p>Its a pond</p>
+        </div>
+    </div>
+
+    <div id="modal-7" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>House 7 clicked!</p>
+            <p>Details and content for house 7.</p>
+        </div>
+    </div>
+
+    <div id="modal-8" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>House 8 clicked!</p>
+            <p>Details and content for house 8.</p>
+        </div>
+    </div>
+
+    <div id="modal-9" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>House 9 clicked!</p>
+            <p>Details and content for house 9.</p>
+        </div>
+    </div>
+
+    <div id="modal-10" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>House 10 clicked!</p>
+            <p>Details and content for house 10.</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/objects/Sky.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
