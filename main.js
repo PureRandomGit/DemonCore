@@ -133,9 +133,9 @@ for (let i = 1; i <= 10; i++) {
         scene.add(struct);
     });
 }
-setTimeout(function(){
-    document.getElementById("welcome").style.display = "none";
-}, 10000);
+// setTimeout(function(){
+//     document.getElementById("welcome").style.display = "none";
+// }, 10000);
 
 // Set camera position
 camera.position.set(25, 2, 10);
